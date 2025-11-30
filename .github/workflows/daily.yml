@@ -1,0 +1,35 @@
+name: Daily 8AM ET Run
+
+on:
+  schedule:
+    # 8:00 AM Eastern Time
+    - cron: '0 13 * * *'  # 13:00 UTC = 8:00 AM ET (Eastern Time)
+
+  workflow_dispatch:  # allows manual triggering
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'  # or your version
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run your Python script
+        env:
+          API_KEY_1: ${{ secrets.API_KEY_1 }}
+          API_KEY_2: ${{ secrets.API_KEY_2 }}
+          API_KEY_3: ${{ secrets.API_KEY_3 }}
+          API_KEY_4: ${{ secrets.API_KEY_4 }}
+          APP_SPECIFIC_PASS: ${{ secrets.APP_SPECIFIC_PASS }}
+          EMAIL_ADDRESS: ${{ secrets.EMAIL_ADDRESS }}
+        run: |
+          python arbitrageDailyFinder.py
